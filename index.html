@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="progress.css" />
+    <title>Document</title>
+  </head>
+  <style>
+    @media (min-width: 650px) and (max-width: 1024px) {
+      .boxes {
+        max-width: 650;
+        max-height: 6em;
+        background-size: contain;
+      }
+      #box1 * {
+        width: 6em !important;
+        height: 6em !important;
+        background-size: cover;
+      }
+      #box2 * {
+        width: 6em !important;
+        height: 6em !important;
+        background-size: cover;
+      }
+      #box3 * {
+        width: 6em !important;
+        height: 6em !important;
+        background-size: cover;
+      }
+      #box4 * {
+        width: 6em !important;
+        height: 6em !important;
+        background-size: cover;
+      }
+      #box5 * {
+        width: 6em !important;
+        height: 6em !important;
+        background-size: cover;
+      }
+      /*  .loading {
+        transform: translate(-140%, 0%);
+      } */
+    }
+    @media (min-width: 320px) and (max-width: 650px) {
+      .boxes {
+        max-width: 650;
+        max-height: 2em;
+        background-size: contain;
+      }
+      #box1 * {
+        width: 2em !important;
+        height: 2em !important;
+        background-size: cover;
+      }
+      #box2 * {
+        width: 2em !important;
+        height: 2em !important;
+        background-size: cover;
+      }
+      #box3 * {
+        width: 2em !important;
+        height: 2em !important;
+        background-size: cover;
+      }
+      #box4 * {
+        width: 2em !important;
+        height: 2em !important;
+        background-size: cover;
+      }
+      #box5 * {
+        width: 2em !important;
+        height: 2em !important;
+        background-size: cover;
+      }
+      /*  .loading {
+        transform: translate(-75%, 0%);
+      } */
+    }
+    body {
+      margin: 0;
+    }
+    .boxes {
+      width: 90%;
+      height: 10em;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 10px #f37335, 0 0 0 20px #e6895b, 0 0 0 30px #eca886,
+        0 0 0 40px #e6b59d, 0 0 0 50px #e9c7b6;
+    }
+    .container {
+      background-image: url(/images/background.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .boxes {
+      background-image: url("./images/boxes.webp");
+      background-size: auto;
+      background-repeat: no-repeat;
+    }
+    .a1 {
+      animation-fill-mode: both;
+    }
+    .controls,
+    .winScreen,
+    .loseScreen {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    .wellcomeMessage {
+      color: white;
+      position: absolute;
+      font-size: 50px;
+      margin-bottom: 2em;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* @keyframes scroll {
+      to {
+        transform: translateY(-30em);
+      }
+    }  */
+  </style>
+  <body>
+    <div
+      style="position: absolute; max-width: 200px; margin: 2rem 0rem 0rem 2rem"
+      class="logo"
+    >
+      <picture style="width: 100%">
+        <source srcset="./images/logo.png" media="(min-width: 650px)" />
+        <img style="width: 100%" src="./images/logo.png" alt="logo" />
+      </picture>
+      <div style="text-align: center">
+        <h4 style="margin: 0; color: white">Slot Machine Game</h4>
+        <h6 style="margin: 0; color: white">
+          Good things always come in three!
+        </h6>
+      </div>
+    </div>
+    <div
+      style="
+        width: 100%;
+        height: 100vh;
+        background-image: url(/images/welcomeScreen.jpg);
+        background-size: cover;
+      "
+      class="hero"
+    >
+      <div
+        id="wellcome"
+        style="
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+        "
+      >
+        <span class="loading"></span>
+      </div>
+    </div>
+
+    <div style="width: 100%; height: 100vh; display: none" class="container">
+      <div
+        style="
+          width: 100%;
+          height: 100vh;
+          position: absolute;
+          z-index: 11111;
+          display: none;
+        "
+        class="loseScreen"
+      >
+        <div
+          style="
+            width: 100%;
+            height: 100%;
+            background-image: url(/images/lost.png);
+            background-repeat: no-repeat;
+            background-position: center;
+          "
+        >
+          <h1
+            style="
+              margin: 0;
+              display: flex;
+              justify-content: center;
+              top: 4em;
+              left: 50%;
+              position: absolute;
+              color: red;
+            "
+          >
+            You Lost
+          </h1>
+        </div>
+      </div>
+      <div
+        style="
+          width: 100%;
+          height: 100vh;
+          position: absolute;
+          z-index: 11111;
+          display: none;
+        "
+        class="winScreen"
+      >
+        <div
+          style="
+            width: 100%;
+            height: 100vh;
+            background-image: url(/images/win.png);
+            background-repeat: no-repeat;
+            background-position: center;
+          "
+        ></div>
+      </div>
+      <div
+        style="
+          display: flex;
+          gap: 2em;
+          overflow: hidden;
+          justify-content: space-around;
+        "
+        class="boxes"
+      >
+        <div class="a1" id="box1">
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/diamond.png);
+            "
+            class="diamond1"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/club.png);
+            "
+            class="club1"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/seven.png);
+            "
+            class="seven1"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/cherries.png);
+            "
+            class="cherry1"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/heart.png);
+            "
+            class="heart1"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/joker.png);
+            "
+            class="joker1"
+          ></div>
+        </div>
+        <div class="a2" id="box2">
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/diamond.png);
+            "
+            class="diamond2"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/club.png);
+            "
+            class="club2"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/seven.png);
+            "
+            class="seven2"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/cherries.png);
+            "
+            class="cherry2"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/heart.png);
+            "
+            class="heart2"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/joker.png);
+            "
+            class="joker2"
+          ></div>
+        </div>
+        <div class="a3" id="box3">
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/diamond.png);
+            "
+            class="diamond3"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/club.png);
+            "
+            class="club3"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/seven.png);
+            "
+            class="seven3"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/cherries.png);
+            "
+            class="cherry3"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/heart.png);
+            "
+            class="heart3"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/joker.png);
+            "
+            class="joker3"
+          ></div>
+        </div>
+        <div class="a4" id="box4">
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/diamond.png);
+            "
+            class="diamond4"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/club.png);
+            "
+            class="club4"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/seven.png);
+            "
+            class="seven4"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/cherries.png);
+            "
+            class="cherry4"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/heart.png);
+            "
+            class="heart4"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/joker.png);
+            "
+            class="joker4"
+          ></div>
+        </div>
+        <div class="a5" id="box5">
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/diamond.png);
+            "
+            class="diamond5"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/club.png);
+            "
+            class="club"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/seven.png);
+            "
+            class="seven5"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/cherries.png);
+            "
+            class="cherry5"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/heart.png);
+            "
+            class="heart5"
+          ></div>
+          <div
+            style="
+              width: 10em;
+              height: 10em;
+              background-image: url(./images/joker.png);
+            "
+            class="joker5"
+          ></div>
+        </div>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: space-around;
+          position: absolute;
+          align-items: center;
+          bottom: 0;
+          width: 100%;
+        "
+        class="controls"
+      >
+        <div>
+          <audio
+            id="player"
+            autoplay
+            loop
+            src="/soudtrack.mp3"
+            type="audio/mp3"
+          ></audio>
+          <h3 style="font-size: larger; color: white">Music</h3>
+          <div>
+            <button onclick="document.getElementById('player').play()">
+              Play
+            </button>
+            <button onclick="document.getElementById('player').pause()">
+              Pause
+            </button>
+            <button
+              onclick="document.getElementById('player').muted=!document.getElementById('player').muted"
+            >
+              Mute/ Unmute
+            </button>
+          </div>
+        </div>
+        <button
+          style="
+            width: 10em;
+            height: 10em;
+            border: none;
+            background: transparent;
+            background-color: gold;
+            border-radius: 50%;
+          "
+          id="spin"
+        >
+          <img style="width: 8em" src="/images/button.png" alt="" />
+        </button>
+        <div>
+          <div>
+            <h2 style="margin: 0; color: white; text-align: center">Score</h2>
+            <div
+              style="
+                margin: 0;
+                width: 5em;
+                height: 2em;
+                color: white;
+                background-color: black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: larger;
+              "
+            >
+              <p id="scoreShow">00</p>
+            </div>
+          </div>
+          <div>
+            <h2 style="margin: 0; color: white; text-align: center">Coins</h2>
+            <div
+              style="
+                margin: 0;
+                width: 5em;
+                height: 2em;
+                color: white;
+                background-color: black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: larger;
+              "
+            >
+              <p id="coinShow">50</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    var spin = document.querySelector("#spin");
+    var table = ["cherry", "club", "diamond", "heart", "joker", "seven"];
+    var currentGame = [];
+    var Sessiongame = {};
+    var wellcomeMessage = document.getElementById("wellcome");
+    var message = document.createElement("h1");
+    message.className = "wellcomeMessage";
+    var newContent = document.createTextNode(
+      "Click anywhere on screen to spin !"
+    );
+    message.appendChild(newContent);
+
+    setTimeout(() => {
+      wellcomeMessage.appendChild(message);
+    }, 1600);
+
+    document.querySelector(".loseScreen").addEventListener("click", (e) => {
+      window.location.reload();
+    });
+    document.querySelector(".winScreen").addEventListener("click", (e) => {
+      window.location.reload();
+    });
+    document.querySelector(".hero").addEventListener("click", (e) => {
+      e.path[1].style.display = "none";
+      document.querySelector(".container").style.display = "block";
+      document.getElementById("player").play();
+      const game = {
+        id: Math.floor(Math.random() * 100),
+        score: 0,
+        coins: 50,
+      };
+      localStorage.setItem("room", JSON.stringify(game));
+      let item = localStorage.getItem("room");
+      Sessiongame = JSON.parse(item);
+    });
+
+    function counts(currentGame) {
+      var count = {};
+      currentGame.forEach(function (i) {
+        count[i] = (count[i] || 0) + 1;
+      });
+      return count;
+    }
+
+    function updateCurrentGame(Session, coins, score) {
+      let Cvalue = coins + Sessiongame.coins;
+      let Svalue = score + Sessiongame.score;
+      let Sessionupdate = {
+        id: Session.id,
+        coins: Cvalue,
+        score: Svalue,
+      };
+      document.getElementById("scoreShow").innerHTML = `${Svalue}`;
+      document.getElementById("coinShow").innerHTML = `${Cvalue}`;
+      localStorage.setItem("room", JSON.stringify(Sessionupdate));
+      console.log(Sessionupdate);
+    }
+
+    function pickRandomElement(array) {
+      let div = array[Math.floor(Math.random() * array.length)];
+      currentGame.push(`${div}`);
+      console.log(div);
+      if (currentGame.length === 5) {
+        let obj = counts(currentGame);
+
+        Object.keys(obj).forEach(function (key) {
+          console.log(key, obj[key]);
+          switch (obj[key]) {
+            case 3:
+              var win = new Audio("./win.mp3");
+              updateCurrentGame(Sessiongame, -10, 100);
+              document.getElementById("scoreShow").innerHTML = "1000";
+              document.querySelector(".loseScreen").style.display = "none";
+              setTimeout(() => {
+                document.querySelector(".winScreen").style.display = "block";
+              }, 500);
+              win.play();
+              break;
+            case 4:
+              updateCurrentGame(Sessiongame, 20, 250);
+              document.querySelector(".loseScreen").style.display = "none";
+              setTimeout(() => {
+                document.querySelector(".winScreen").style.display = "block";
+              }, 500);
+              break;
+            case 5:
+              updateCurrentGame(Sessiongame, 500, 500);
+              document.querySelector(".loseScreen").style.display = "none";
+              setTimeout(() => {
+                document.querySelector(".winScreen").style.display = "block";
+              }, 500);
+              break;
+            default:
+              var lose = new Audio("./lose.mp3");
+              updateCurrentGame(Sessiongame, -10, 0);
+              lose.play();
+              setTimeout(() => {
+                document.querySelector(".loseScreen").style.display = "block";
+              }, 500);
+              break;
+          }
+        });
+      }
+      return div;
+    }
+
+    function playAudio() {
+      var play = new Audio("./play.mp3");
+      if (typeof play.loop === "Boolean") {
+        play.loop = true;
+        play.playbackRate = 2;
+      } else {
+        play.addEventListener(
+          "ended",
+          function () {
+            this.currentTime = 0;
+            this.playbackRate = 0.5;
+            this.play();
+          },
+          false
+        );
+      }
+      play.play();
+      setTimeout(() => {
+        play.pause();
+        play.currentTime = 0;
+      }, 2000);
+    }
+
+    spin.addEventListener("click", (e) => {
+      currentGame = [];
+
+      playAudio();
+      var i = 1;
+      function looping() {
+        setTimeout(function () {
+          let selected = document.querySelector(
+            `.${pickRandomElement(table)}${i}`
+          );
+
+          /* currentGame.push(...selected.id);
+          console.log("current game", currentGame); */
+          var topPos = selected.offsetTop || 0;
+          console.log(topPos);
+          const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
+          const time = {
+            duration: 500,
+            iterations: 1,
+
+            fill: "forwards",
+          };
+          if (!slotSpin) {
+            return;
+          } else {
+            document.querySelector(`.a${i}`).animate(slotSpin, time);
+          }
+          i++;
+          if (i < 6) {
+            looping();
+          }
+        }, 250);
+      }
+      looping();
+
+      /*  var selected = document.querySelector(`.${pickRandomElement(table)}1`);
+      var topPos = selected.offsetTop;
+      const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
+      const time = {
+        duration: 500,
+        iterations: 1,
+
+        fill: "forwards",
+      };
+      document.querySelector(".a1").animate(slotSpin, time); */
+    });
+  </script>
+</html>
