@@ -21,18 +21,16 @@ function updateCurrentGame(Session, coins, score) {
   document.getElementById("scoreShow").innerHTML = `${Svalue}`;
   document.getElementById("coinShow").innerHTML = `${Cvalue}`;
   localStorage.setItem("room", JSON.stringify(Sessionupdate));
-  console.log(Sessionupdate);
 }
 
 function pickRandomElement(array) {
   let div = array[Math.floor(Math.random() * array.length)];
   currentGame.push(`${div}`);
-  console.log(div);
+
   if (currentGame.length === 5) {
     let obj = counts(currentGame);
 
     Object.keys(obj).forEach(function (key) {
-      console.log(key, obj[key]);
       switch (obj[key]) {
         case 3:
           var win = new Audio("./win.mp3");
@@ -81,10 +79,8 @@ spin.addEventListener("click", (e) => {
     setTimeout(function () {
       let selected = document.querySelector(`.${pickRandomElement(table)}${i}`);
 
-      /* currentGame.push(...selected.id);
-           console.log("current game", currentGame); */
       var topPos = selected.offsetTop || 0;
-      console.log(topPos);
+
       const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
       const time = {
         duration: 500,

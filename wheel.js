@@ -7,7 +7,6 @@ function pickRandomNumberInDegrees() {
   const deleteNum = Math.trunc(num);
 
   const finalResult = Math.ceil(((num - deleteNum) * 100) / delt);
-  console.log(finalResult);
 
   return res;
 }
@@ -96,7 +95,7 @@ spinWheel.addEventListener("click", (e) => {
       }
       return newContent;
     });
-    console.log(ttt);
+
     return ttt;
   }
   var wheel = document.getElementById("actual_wheel");
