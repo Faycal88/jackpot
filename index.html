@@ -8,7 +8,7 @@
     <title>Document</title>
   </head>
   <style>
-    @media (min-width: 650px) and (max-width: 1024px) {
+    @media (min-width: 670px) and (max-width: 1024px) {
       .boxes {
         max-width: 650;
         max-height: 6em;
@@ -39,11 +39,8 @@
         height: 6em !important;
         background-size: cover;
       }
-      /*  .loading {
-        transform: translate(-140%, 0%);
-      } */
     }
-    @media (min-width: 320px) and (max-width: 650px) {
+    @media (min-width: 320px) and (max-width: 670px) {
       .boxes {
         max-width: 650;
         max-height: 2em;
@@ -74,9 +71,18 @@
         height: 2em !important;
         background-size: cover;
       }
-      /*  .loading {
-        transform: translate(-75%, 0%);
-      } */
+      .circle {
+        width: 20em !important;
+        height: 20em !important;
+        background-size: cover;
+      }
+      svg {
+        width: 50px;
+        height: 50px;
+      }
+      .spin-btn img {
+        width: 7em !important;
+      }
     }
     body {
       margin: 0;
@@ -116,12 +122,18 @@
       margin-bottom: 2em;
       background-color: rgba(0, 0, 0, 0.4);
     }
-
-    /* @keyframes scroll {
-      to {
-        transform: translateY(-30em);
-      }
-    }  */
+    #spinWheel:hover {
+      background-color: rgb(248, 229, 117);
+    }
+    #notify {
+      display: block;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 11111111111;
+      display: none;
+      position: absolute;
+    }
   </style>
   <body>
     <div
@@ -160,6 +172,79 @@
         "
       >
         <span class="loading"></span>
+      </div>
+    </div>
+
+    <div id="notify"></div>
+    <div
+      style="display: none; width: 100%; height: 100vh; position: absolute"
+      class="wheel_container"
+    >
+      <div
+        style="
+          position: relative;
+          padding: 0;
+          width: 42em;
+          height: 42em;
+
+          background-image: url(/images/fancy_circle.png);
+          background-repeat: no-repeat;
+        "
+        class="circle"
+      >
+        <div
+          style="
+            position: absolute;
+            left: 42%;
+            top: -0.6em;
+            color: gold;
+            fill: currentColor;
+            z-index: 11111;
+          "
+          class="arrow"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100"
+            height="100"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 21l-12-18h24z" />
+          </svg>
+        </div>
+        <div class="spinWhell">
+          <button
+            id="spinWheel"
+            class="spin-btn"
+            style="
+              position: absolute;
+              width: 35%;
+              height: 35%;
+              border: none;
+              background: transparent;
+              background-color: gold;
+              border-radius: 50%;
+              transform: translate(93%, 93%);
+              cursor: pointer;
+              z-index: 1111;
+            "
+          >
+            <img style="width: 8em" src="/images/button.png" alt="" />
+          </button>
+        </div>
+        <div
+          id="actual_wheel"
+          style="
+            width: 90%;
+            margin: 0;
+            height: 90%;
+            background-image: url(/images/actual_wheel.png);
+            background-repeat: no-repeat;
+            margin: 5% 0% 0% 5%;
+            background-size: cover;
+          "
+          class="wheel"
+        ></div>
       </div>
     </div>
 
@@ -568,6 +653,7 @@
   </body>
   <script>
     var spin = document.querySelector("#spin");
+    var spinWheel = document.querySelector(".spin-btn");
     var table = ["cherry", "club", "diamond", "heart", "joker", "seven"];
     var currentGame = [];
     var Sessiongame = {};
@@ -589,9 +675,15 @@
     document.querySelector(".winScreen").addEventListener("click", (e) => {
       window.location.reload();
     });
-    document.querySelector(".hero").addEventListener("click", (e) => {
-      e.path[1].style.display = "none";
+    document.getElementById("notify").addEventListener("click", (e) => {
+      document.querySelector(".wheel_container").style.display = "none";
+      document.getElementById("notify").style.display = "none";
       document.querySelector(".container").style.display = "block";
+    });
+    document.querySelector(".hero").addEventListener("click", (e) => {
+      console.log(e);
+      e.path[1].style.display = "none";
+      document.querySelector(".wheel_container").style.display = "flex";
       document.getElementById("player").play();
       const game = {
         id: Math.floor(Math.random() * 100),
@@ -696,6 +788,136 @@
       }, 2000);
     }
 
+    function pickRandomNumberInDegrees() {
+      const wins = {
+        0: "Null",
+        1: "bankrupt",
+        2: 300,
+        3: 500,
+        4: 400,
+        5: 500,
+        6: 800,
+        7: "turn",
+        8: 700,
+        9: "free",
+        10: 650,
+        11: "bankrupt",
+        12: 900,
+        13: 500,
+        14: 350,
+        15: 600,
+        16: 500,
+        17: 400,
+        18: 550,
+        19: 800,
+        20: 300,
+        21: 700,
+        22: 600,
+        23: 500,
+        24: "null",
+      };
+
+      Object.keys(wins).forEach(function (key) {
+        console.log(key, wins[key]);
+        switch (key) {
+          case 0:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
+          case 5:
+            break;
+          case 6:
+            break;
+          case 7:
+            break;
+          case 8:
+            break;
+          case 9:
+            break;
+          case 10:
+            break;
+          case 11:
+            break;
+          case 12:
+            break;
+          case 13:
+            break;
+          case 14:
+            break;
+          case 15:
+            break;
+          case 16:
+            break;
+          case 17:
+            break;
+          case 18:
+            break;
+          case 19:
+            break;
+          case 20:
+            break;
+          case 21:
+            break;
+          case 22:
+            break;
+          case 23:
+            break;
+          case 24:
+            break;
+          default:
+            break;
+        }
+      });
+
+      const min = 0;
+      const max = 2520;
+      const delt = 4.166666666666667;
+      const res = Math.floor(Math.random() * (max - min + 1)) + min;
+      const num = res / 360;
+      const deleteNum = Math.trunc(num);
+      console.log(num, deleteNum);
+      const finalResult = Math.ceil(((num - deleteNum) * 100) / delt);
+      console.log(num - deleteNum);
+      console.log((num - deleteNum) * 1000000);
+      console.log(finalResult);
+
+      /* console.log(finalResult); */
+      /*  if (res < 360) {
+           let num = (res / 7) * 15;
+           num = Math.ceil(num);
+           console.log(num);
+         } else if (res < min && res > 0) {
+           let num = (res / 14) * 15;
+           num = Math.ceil(num);
+           console.log(num);
+         } else if (res < 1080 && res > min) {
+           let num = (res / 21) * 15;
+           num = Math.ceil(num);
+           console.log(num);
+         } else if (res < 1440 && res > 1080) {
+           let num = (res / 28) * 15;
+           num = Math.ceil(num);
+         } else if (res < 1800 && res > 1440) {
+           let num = (res / 35) * 15;
+           num = Math.ceil(num);
+           console.log(num);
+         } else if (res < 2160 && res > 1800) {
+           let num = (res / 42) * 15;
+           num = Math.ceil(num);
+           console.log(num);
+         } else if (res < max && res > 2160) {
+           let num = (res / 49) * 15;
+           num = Math.ceil(num);
+           console.log(num);
+         }
+    */
+      return res;
+    }
+
     spin.addEventListener("click", (e) => {
       currentGame = [];
 
@@ -708,7 +930,7 @@
           );
 
           /* currentGame.push(...selected.id);
-          console.log("current game", currentGame); */
+             console.log("current game", currentGame); */
           var topPos = selected.offsetTop || 0;
           console.log(topPos);
           const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
@@ -732,15 +954,41 @@
       looping();
 
       /*  var selected = document.querySelector(`.${pickRandomElement(table)}1`);
-      var topPos = selected.offsetTop;
-      const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
-      const time = {
-        duration: 500,
-        iterations: 1,
+         var topPos = selected.offsetTop;
+         const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
+         const time = {
+           duration: 500,
+           iterations: 1,
 
+           fill: "forwards",
+         };
+         document.querySelector(".a1").animate(slotSpin, time); */
+    });
+
+    spinWheel.addEventListener("click", (e) => {
+      var wheel = document.getElementById("actual_wheel");
+      const wheelSpin = [
+        { transform: `rotate(${pickRandomNumberInDegrees()}deg)` },
+      ];
+      const time = {
+        duration: 2000,
+        iterations: 1,
         fill: "forwards",
       };
-      document.querySelector(".a1").animate(slotSpin, time); */
+      wheel.animate(wheelSpin, time);
+
+      setTimeout(() => {
+        var notif = document.getElementById("notify");
+        var message = document.createElement("h1");
+        message.className = "wellcomeMessage";
+        var newContent = document.createTextNode(
+          "Click anywhere on screen to spin !"
+        );
+        message.appendChild(newContent);
+        notif.appendChild(message);
+        document.getElementById;
+        notif.style.display = "block";
+      }, 3000);
     });
   </script>
 </html>
