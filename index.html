@@ -83,6 +83,9 @@
       .spin-btn img {
         width: 7em !important;
       }
+      .wellcomeMessage {
+        font-size: 16px !important;
+      }
     }
     body {
       margin: 0;
@@ -171,7 +174,7 @@
           height: 100%;
         "
       >
-        <span class="loading"></span>
+        <span id="loading" class="loading"></span>
       </div>
     </div>
 
@@ -652,14 +655,22 @@
     </div>
   </body>
   <script>
+    let wheelscript = document.createElement("script");
+    wheelscript.src = "wheel.js";
+    let spinscript = document.createElement("script");
+    spinscript.src = "slot.js";
+    let audioscript = document.createElement("script");
+    audioscript.src = "audioController.js";
+    document.head.append(wheelscript);
+    document.head.append(spinscript);
+    document.head.append(audioscript);
+
     var spin = document.querySelector("#spin");
     var spinWheel = document.querySelector(".spin-btn");
-    var table = ["cherry", "club", "diamond", "heart", "joker", "seven"];
-    var currentGame = [];
-    var Sessiongame = {};
     var wellcomeMessage = document.getElementById("wellcome");
     var message = document.createElement("h1");
     message.className = "wellcomeMessage";
+    message.id = "wellcomeMessage";
     var newContent = document.createTextNode(
       "Click anywhere on screen to spin !"
     );
@@ -681,8 +692,21 @@
       document.querySelector(".container").style.display = "block";
     });
     document.querySelector(".hero").addEventListener("click", (e) => {
-      console.log(e);
-      e.path[1].style.display = "none";
+      console.log(e.path.id);
+      switch (e.path[0].id) {
+        case "wellcome":
+          e.path[1].style.display = "none";
+          break;
+        case "loading":
+          e.path[2].style.display = "none";
+          break;
+        case "wellcomeMessage":
+          e.path[2].style.display = "none";
+          break;
+        default:
+          break;
+      }
+
       document.querySelector(".wheel_container").style.display = "flex";
       document.getElementById("player").play();
       const game = {
@@ -693,302 +717,6 @@
       localStorage.setItem("room", JSON.stringify(game));
       let item = localStorage.getItem("room");
       Sessiongame = JSON.parse(item);
-    });
-
-    function counts(currentGame) {
-      var count = {};
-      currentGame.forEach(function (i) {
-        count[i] = (count[i] || 0) + 1;
-      });
-      return count;
-    }
-
-    function updateCurrentGame(Session, coins, score) {
-      let Cvalue = coins + Sessiongame.coins;
-      let Svalue = score + Sessiongame.score;
-      let Sessionupdate = {
-        id: Session.id,
-        coins: Cvalue,
-        score: Svalue,
-      };
-      document.getElementById("scoreShow").innerHTML = `${Svalue}`;
-      document.getElementById("coinShow").innerHTML = `${Cvalue}`;
-      localStorage.setItem("room", JSON.stringify(Sessionupdate));
-      console.log(Sessionupdate);
-    }
-
-    function pickRandomElement(array) {
-      let div = array[Math.floor(Math.random() * array.length)];
-      currentGame.push(`${div}`);
-      console.log(div);
-      if (currentGame.length === 5) {
-        let obj = counts(currentGame);
-
-        Object.keys(obj).forEach(function (key) {
-          console.log(key, obj[key]);
-          switch (obj[key]) {
-            case 3:
-              var win = new Audio("./win.mp3");
-              updateCurrentGame(Sessiongame, -10, 100);
-              document.getElementById("scoreShow").innerHTML = "1000";
-              document.querySelector(".loseScreen").style.display = "none";
-              setTimeout(() => {
-                document.querySelector(".winScreen").style.display = "block";
-              }, 500);
-              win.play();
-              break;
-            case 4:
-              updateCurrentGame(Sessiongame, 20, 250);
-              document.querySelector(".loseScreen").style.display = "none";
-              setTimeout(() => {
-                document.querySelector(".winScreen").style.display = "block";
-              }, 500);
-              break;
-            case 5:
-              updateCurrentGame(Sessiongame, 500, 500);
-              document.querySelector(".loseScreen").style.display = "none";
-              setTimeout(() => {
-                document.querySelector(".winScreen").style.display = "block";
-              }, 500);
-              break;
-            default:
-              var lose = new Audio("./lose.mp3");
-              updateCurrentGame(Sessiongame, -10, 0);
-              lose.play();
-              setTimeout(() => {
-                document.querySelector(".loseScreen").style.display = "block";
-              }, 500);
-              break;
-          }
-        });
-      }
-      return div;
-    }
-
-    function playAudio() {
-      var play = new Audio("./play.mp3");
-      if (typeof play.loop === "Boolean") {
-        play.loop = true;
-        play.playbackRate = 2;
-      } else {
-        play.addEventListener(
-          "ended",
-          function () {
-            this.currentTime = 0;
-            this.playbackRate = 0.5;
-            this.play();
-          },
-          false
-        );
-      }
-      play.play();
-      setTimeout(() => {
-        play.pause();
-        play.currentTime = 0;
-      }, 2000);
-    }
-
-    function pickRandomNumberInDegrees() {
-      const wins = {
-        0: "Null",
-        1: "bankrupt",
-        2: 300,
-        3: 500,
-        4: 400,
-        5: 500,
-        6: 800,
-        7: "turn",
-        8: 700,
-        9: "free",
-        10: 650,
-        11: "bankrupt",
-        12: 900,
-        13: 500,
-        14: 350,
-        15: 600,
-        16: 500,
-        17: 400,
-        18: 550,
-        19: 800,
-        20: 300,
-        21: 700,
-        22: 600,
-        23: 500,
-        24: "null",
-      };
-
-      Object.keys(wins).forEach(function (key) {
-        console.log(key, wins[key]);
-        switch (key) {
-          case 0:
-            break;
-          case 2:
-            break;
-          case 3:
-            break;
-          case 4:
-            break;
-          case 5:
-            break;
-          case 6:
-            break;
-          case 7:
-            break;
-          case 8:
-            break;
-          case 9:
-            break;
-          case 10:
-            break;
-          case 11:
-            break;
-          case 12:
-            break;
-          case 13:
-            break;
-          case 14:
-            break;
-          case 15:
-            break;
-          case 16:
-            break;
-          case 17:
-            break;
-          case 18:
-            break;
-          case 19:
-            break;
-          case 20:
-            break;
-          case 21:
-            break;
-          case 22:
-            break;
-          case 23:
-            break;
-          case 24:
-            break;
-          default:
-            break;
-        }
-      });
-
-      const min = 0;
-      const max = 2520;
-      const delt = 4.166666666666667;
-      const res = Math.floor(Math.random() * (max - min + 1)) + min;
-      const num = res / 360;
-      const deleteNum = Math.trunc(num);
-      console.log(num, deleteNum);
-      const finalResult = Math.ceil(((num - deleteNum) * 100) / delt);
-      console.log(num - deleteNum);
-      console.log((num - deleteNum) * 1000000);
-      console.log(finalResult);
-
-      /* console.log(finalResult); */
-      /*  if (res < 360) {
-           let num = (res / 7) * 15;
-           num = Math.ceil(num);
-           console.log(num);
-         } else if (res < min && res > 0) {
-           let num = (res / 14) * 15;
-           num = Math.ceil(num);
-           console.log(num);
-         } else if (res < 1080 && res > min) {
-           let num = (res / 21) * 15;
-           num = Math.ceil(num);
-           console.log(num);
-         } else if (res < 1440 && res > 1080) {
-           let num = (res / 28) * 15;
-           num = Math.ceil(num);
-         } else if (res < 1800 && res > 1440) {
-           let num = (res / 35) * 15;
-           num = Math.ceil(num);
-           console.log(num);
-         } else if (res < 2160 && res > 1800) {
-           let num = (res / 42) * 15;
-           num = Math.ceil(num);
-           console.log(num);
-         } else if (res < max && res > 2160) {
-           let num = (res / 49) * 15;
-           num = Math.ceil(num);
-           console.log(num);
-         }
-    */
-      return res;
-    }
-
-    spin.addEventListener("click", (e) => {
-      currentGame = [];
-
-      playAudio();
-      var i = 1;
-      function looping() {
-        setTimeout(function () {
-          let selected = document.querySelector(
-            `.${pickRandomElement(table)}${i}`
-          );
-
-          /* currentGame.push(...selected.id);
-             console.log("current game", currentGame); */
-          var topPos = selected.offsetTop || 0;
-          console.log(topPos);
-          const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
-          const time = {
-            duration: 500,
-            iterations: 1,
-
-            fill: "forwards",
-          };
-          if (!slotSpin) {
-            return;
-          } else {
-            document.querySelector(`.a${i}`).animate(slotSpin, time);
-          }
-          i++;
-          if (i < 6) {
-            looping();
-          }
-        }, 250);
-      }
-      looping();
-
-      /*  var selected = document.querySelector(`.${pickRandomElement(table)}1`);
-         var topPos = selected.offsetTop;
-         const slotSpin = [{ transform: `translateY(-${topPos}px)` }];
-         const time = {
-           duration: 500,
-           iterations: 1,
-
-           fill: "forwards",
-         };
-         document.querySelector(".a1").animate(slotSpin, time); */
-    });
-
-    spinWheel.addEventListener("click", (e) => {
-      var wheel = document.getElementById("actual_wheel");
-      const wheelSpin = [
-        { transform: `rotate(${pickRandomNumberInDegrees()}deg)` },
-      ];
-      const time = {
-        duration: 2000,
-        iterations: 1,
-        fill: "forwards",
-      };
-      wheel.animate(wheelSpin, time);
-
-      setTimeout(() => {
-        var notif = document.getElementById("notify");
-        var message = document.createElement("h1");
-        message.className = "wellcomeMessage";
-        var newContent = document.createTextNode(
-          "Click anywhere on screen to spin !"
-        );
-        message.appendChild(newContent);
-        notif.appendChild(message);
-        document.getElementById;
-        notif.style.display = "block";
-      }, 3000);
     });
   </script>
 </html>
